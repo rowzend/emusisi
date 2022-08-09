@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\Example\AdminController;
+use App\Http\Controllers\Example\SuperAdminController;
+use App\Http\Controllers\Example\UserController;
 use Illuminate\Support\Facades\Route;
-  
+
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -15,12 +19,15 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-  
+
 Route::get('/', function () {
-    return view('beranda', [
-        "title" => "SELAMAT DATANG!!"
-    ]);
+    return view('welcome');
 });
+// Route::get('/', function () {
+//     return view('beranda', [
+//         "title" => "SELAMAT DATANG!!"
+//     ]);
+// });
 Route::get('/mutasi', function () {
     return view('mutasi', [
         "title" => "MUTASI"
@@ -36,46 +43,15 @@ Route::get('/pangkat', function () {
         "title" => "PROMOSI"
     ]);
 });
-  
-Auth::routes();
-  
-/*------------------------------------------
---------------------------------------------
-All Normal Users Routes List
---------------------------------------------
---------------------------------------------*/
-Route::middleware(['auth', 'user-access:user'])->group(function () {
-  
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
-});
-  
-/*------------------------------------------
---------------------------------------------
-All Super Admin Routes List
---------------------------------------------
---------------------------------------------*/
-Route::middleware(['auth', 'user-access:super-admin'])->group(function () {
-  
-    Route::get('/super-admin/home', [HomeController::class, 'superAdminHome'])->name('super.admin.home');
-});
-  
-/*------------------------------------------
---------------------------------------------
-All Admin Routes List
---------------------------------------------
---------------------------------------------*/
-Route::middleware(['auth', 'user-access:manager'])->group(function () {
-  
-    Route::get('/manager/home', [HomeController::class, 'managerHome'])->name('manager.home');
-});
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
+Route::resource('welcome', WelcomeController::class);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('super-admin', [SuperAdminController::class, 'index']);
+
+Route::get('admin', [AdminController::class, 'index']);
+
+Route::get('user', [UserController::class, 'index']);
